@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for group in user.groups.all %}
+        {% if group.name == "Author" %}
+            <h2>You already have Author access.</h2>
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                <h3>Do you want to add Recipes? </h3><p> Then become an author ---- Submit a request:</p>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

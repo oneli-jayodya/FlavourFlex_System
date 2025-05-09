@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+
+{% block title %}Recipe{% endblock %}
+
+
+{% block content %}
+<style>
+    .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    }
+
+    .search-container input {
+    width: 300px;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    }
+
+    .search-container button {
+    padding: 0.5rem 1rem;
+    background-color: #FB8F4D;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    }
+
+    .search-container button:hover {
+    background-color: #f9a83b;
+    }
+
+    .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+    }
+
+    .cards_item {
+    display: flex;
+    padding: 0.5rem;
+    }
+
+    .card {
+    background-color: white;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-left: 30px;
+    background: repeating-linear-gradient(#0000 0 calc(1.2rem - 1px), #66afe1 0 1.2rem) right bottom / 100% 100%, linear-gradient(red 0 0) 30px 0 / 2px 100% #fff;
+    background-repeat: no-repeat;
+    }
+
+    .card_image img {
+    width: 100%;
+    height: calc(13 * 1.2rem);
+    object-fit: cover;
+    }
+
+    .card_content {
+    padding: 1.2rem;
+    color: black;
+    }
+
+    h2.card_title {
+    font-size: 1.5em;
+    margin: 1.2rem 0;
+    font-weight: 900;
+    }
+
+    p {
+    margin: 1.2rem 0;
+    }
+
+    .card_actions .btn {
+    margin-right: 0.5rem;
+    margin: 5px;
+    }
+
+    /* Section containing the waves */
+    section {
+        position: relative;
+        width: 100%;
+        min-height: 100vh; /* Ensure the section covers the full viewport height */
+        padding-top: 50px; /* Add top padding to create space above the waves */
+        overflow: hidden;
+    }
+
+    /* Wave animation */
+    section .air {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px; /* Height of the wave */
+        background: url(https://1.bp.blogspot.com/-xQUc-TovqDk/XdxogmMqIRI/AAAAAAAACvI/AizpnE509UMGBcTiLJ58BC6iViPYGYQfQCLcBGAsYHQ/s1600/wave.png);
+        background-size: 1000px 100px;
+    }
+
+    /* Wave animation delays and opacity */
+    section .air.air1 {
+        animation: wave 30s linear infinite;
+        z-index: 1000;
+        opacity: 1;
+        animation-delay: 0s;
+        bottom: 0;
+    }
+
+    section .air.air2 {
+        animation: wave2 15s linear infinite;
+        z-index: 999;
+        opacity: 0.5;
+        animation-delay: -5s;
+        bottom: 10px;
+    }
+
+    section .air.air3 {
+        animation: wave 30s linear infinite;
+        z-index: 998;
+        opacity: 0.2;
+        animation-delay: -2s;
+        bottom: 15px;
+    }
+
+    section .air.air4 {
+        animation: wave2 5s linear infinite;
+        z-index: 997;
+        opacity: 0.7;
+        animation-delay: -5s;
+        bottom: 20px;
+    }
+
+    .pagination {
+        margin: 30px 0;
+        text-align: center;
+    }
+
+    .pagination a {
+        color: #FB8F4D;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #FB8F4D;
+        border-radius: 4px;
+        margin: 0 5px;
+    }
+
+    .pagination a:hover {
+        background-color: #FB8F4D;
+        color: white;
+    }
+
+    .pagination .current {
+        padding: 5px 10px;
+        font-weight: bold;
+    }
+
+    /* Ensure <hr> is visible */
+    hr {
+        border: 0;
+        height: 1px;
+        background: #ccc;
+        margin: 20px 0;
+        margin-bottom: 20%;
+
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    /* Active button color (yellow when clicked) */
+    .btn-secondary.active {
+      background-color: rgb(255, 179, 0);
+      color: black; /* Change text color for contrast */
+    }
+    /* Ensure the modal is displayed correctly */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-backdrop {
+      z-index: 1049 !important;
+    }
+
+    .modal-dialog {
+      position: relative;
+      margin: 10% auto;
+      width: 80%;
+      max-width: 500px;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: white;
+      border: 1px solid #888;
+      border-radius: 0.3rem;
+      padding: 20px;
+      color: #35393d;
+    }
+    
+    /* Keyframes for wave animation */
+    @keyframes wave {
+        0% {
+            background-position-x: 0px;
+        }
+        100% {
+            background-position-x: 1000px;
+        }
+    }
+
+    @keyframes wave2 {
+        0% {
+            background-position-x: 0px;
+        }
+        100% {
+            background-position-x: -1000px;
+        }
+    }
+
+</style>
+<section>
+
+<h3 class="mb-4 text-white">Recipes</h3>
+<br>
+<form method="get" action="">
+  <div class="search-container">
+      <input type="text" name="recipe_name" placeholder="Search by Recipe Name ..." class="form-control" value="{{ request.GET.recipe_name }}" style="background-color: rgb(212, 156, 240)">
+      <input type="text" name="method_name" placeholder="Search by Equipment Name ..." class="form-control" value="{{ request.GET.method_name }}" style="background-color:rgb(243, 243, 179)">
+      <input type="text" name="ingredient_name" placeholder="Search by Ingredient Name ..." class="form-control" value="{{ request.GET.ingredient_name }}" style="background-color: pink">
+  </div>
+  <div class="search-container">
+    <input type="text" name="exclude_ingredient" placeholder="Search by Exclude Ingredient ..." class="form-control" value="{{ request.GET.exclude_ingredient }}" style="background-color: rgb(178, 249, 178)">
+    <input type="text" name="exclude_equipment" placeholder="Search by Exclude Equipment..." class="form-control" value="{{ request.GET.exclude_equipment }}" style="background-color:rgb(185, 200, 245)">
+    <button type="submit" style="width: 200px; background-color: #ca7309;">Search</button>
+</div>
+</form>
+
+<br>
+{% if user.is_authenticated %}
+    {% if is_author %}
+      <a href="{% url 'list_recipes' %}?my_recipes=true" class="btn btn-secondary">Show My Recipes</a>
+    {% endif %}
+    {% if is_author %}
+      <a href="{% url 'list_recipes' %}?all=true" class="btn btn-secondary">Show All Recipes</a>
+    {% endif %}
+{% endif %}
+
+{% if recipe %}
+  <!-- This block is for showing the details of a single recipe -->
+  <div class="recipe-detail">
+    <h2>{{ recipe.name }}</h2>
+    <p><strong>Type:</strong> {{ recipe.food_type.type }}</p>
+    <p><strong>Description:</strong> {{ recipe.description }}</p>
+    <p><strong>Preparation Time:</strong> {{ recipe.duration }} Minutes</p>
+    <p><strong>Method:</strong> {{ recipe.method.name }}</p>
+    <p><strong>Ingredients:</strong> 
+      {% for ingredient in recipe.ingredients.all %}
+        {{ ingredient.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  </div>
+{% else %}
+<div class="main">
+  <ul class="cards">
+    {% for recipe in recipes %}
+    <li class="cards_item">
+      <div class="card">
+        <div class="card_content">
+          <h2 class="card_title">{{ recipe.name }}</h2>
+          <div class="card_text">
+            <p><strong>Type:</strong> {{ recipe.food_type.type }}</p>
+            <p><strong>Description:</strong> {{ recipe.description }}</p>
+            <p><strong>Preparation Time:</strong> {{ recipe.duration }} Minutes</p>
+          </div>
+          <p><strong>Equipment:</strong> {{ recipe.method.name }}</p>
+
+          <p><strong>Ingredients:</strong> 
+            {% for ingredient in recipe.ingredients.all %}
+              {{ ingredient.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+
+          <div class="card_actions">
+            {% if user.is_authenticated and recipe.can_edit %}
+              <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-warning btn-sm">Edit</a>
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteRecipeId('{{ recipe.id }}')">
+                Delete
+              </button>
+            {% endif %}
+
+            <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary btn-sm">View Recipe</a>
+
+            <a href="{% url 'show_comments' recipe.id %}" class="btn btn-secondary btn-sm">Show Comments ({{ recipe.comments.count }})</a>
+
+            {% if user.is_authenticated %}
+              <a href="{% url 'add_comment' recipe.id %}" class="btn btn-primary btn-sm">Add Comment</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </li>
+    {% empty %}
+        <h2>No recipes found.</h2>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Recipe Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this recipe? This action cannot be undone!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form id="deleteForm" method="POST" action="">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pagination">
+  <span class="step-links">
+      {% if recipes.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ recipes.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ recipes.number }} of {{ recipes.paginator.num_pages }}.
+      </span>
+
+      {% if recipes.has_next %}
+          <a href="?page={{ recipes.next_page_number }}">next</a>
+          <a href="?page={{ recipes.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+ 
+</div>
+<hr>
+    <div class='air air1'></div>
+    <div class='air air2'></div>
+    <div class='air air3'></div>
+    <div class='air air4'></div>
+</section>
+<script>
+// Set the form action with the recipe ID
+function setDeleteRecipeId(recipeId) {
+  document.getElementById("deleteForm").action = "/recipes/delete/" + recipeId + "/";
+}
+
+  document.addEventListener('DOMContentLoaded', function() {
+      // Get all buttons with the class 'btn-secondary'
+      const buttons = document.querySelectorAll('.btn-secondary');
+
+      // Get the current URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const showAll = urlParams.get('all') === 'true';
+      const showMyRecipes = urlParams.get('my_recipes') === 'true';
+
+      buttons.forEach(button => {
+          // Check if the button's href matches the current URL parameters
+          if ((showAll && button.href.includes('all=true')) || 
+              (showMyRecipes && button.href.includes('my_recipes=true'))) {
+              button.classList.add('active');
+          }
+
+          // Add click event listener
+          button.addEventListener('click', function() {
+              // Remove 'active' class from all buttons
+              buttons.forEach(btn => btn.classList.remove('active'));
+
+              // Add 'active' class to the clicked button
+              this.classList.add('active');
+          });
+      });
+  });
+  </script>
+
+{% endblock %}

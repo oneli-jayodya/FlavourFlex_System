@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Recipe{% endblock %}
+
+{% block content %}
+<div class="main container mt-5">
+    {% if success_message %}
+        <div class="alert alert-success" role="alert">
+            {{ success_message }}
+        </div>
+    {% endif %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    <h3>{% if recipe %}Edit Recipe{% else %}Add Recipe{% endif %}</h3>
+    <form method="POST" action="{% if recipe %}{% url 'edit_recipe' recipe.id %}{% else %}{% url 'adding_recipe' %}{% endif %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <!-- Correct 'for' attribute matches the id 'recipe_name' -->
+            <label for="recipe_name" class="form-label">Recipe Name</label>
+            <input type="text" id="recipe_name" name="recipe_name" class="form-control" placeholder="Enter recipe name" value="{% if recipe %}{{ recipe.name }}{% else %}{{ request.user.username }}'s {% endif %}" required>
+        </div>
+        
+        <div class="mb-3">
+            <!-- Correct 'for' attribute matches the id 'recipe_description' -->
+            <label for="recipe_description" class="form-label">Steps</label>
+            <textarea id="recipe_description" name="recipe_description" class="form-control" rows="3" placeholder="Enter recipe description">{% if recipe %}{{ recipe.description }}{% endif %}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <!-- Correct 'for' attribute matches the id 'food_type' -->
+            <label for="food_type" class="form-label">Food Type</label>
+            <select id="food_type" name="food_type" class="form-select" required>
+                <option value="" selected disabled>Choose a type</option>
+                {% for food_type in food_types %}
+                    <option value="{{ food_type.id }}" {% if recipe and recipe.food_type.id == food_type.id %}selected{% endif %}>{{ food_type.type }}</option>
+                {% endfor %}
+                <option value="add-new-type">Add New Type...</option>
+            </select>
+        </div>
+
+        <br>
+
+        <div class="mb-3">
+            <!-- Correct 'for' attribute matches the id 'cooking_method' -->
+            <label for="cooking_method" class="form-label">Cooking Equipment</label>
+            <select id="cooking_method" name="cooking_method" class="form-select" required>
+                <option value="" selected disabled>Choose an equipment</option>
+                {% for method in methods %}
+                    <option value="{{ method.id }}" {% if recipe and recipe.method.id == method.id %}selected{% endif %}>{{ method.name }}</option>
+                {% endfor %}
+                <option value="add-new-method">Add New Equipment...</option>
+            </select>
+        </div>
+
+        <br>
+        
+        <label for="ingredients-container" class="form-label">Ingredients</label>
+        <div id="ingredients-container" class="mb-3">
+            {% for ingredient_option in recipe.ingredients.all %}
+                <div class="input-group mb-2">
+                    <!-- Correct 'for' attribute matches the id of each ingredient dropdown -->
+                    <select name="ingredients[]" class="form-select" id="ingredient_select_{{ forloop.counter }}">
+                        <option value="" selected disabled>Select ingredient</option>
+                        {% for ingredient in ingredients %}
+                            <option value="{{ ingredient.id }}" {% if ingredient_option.id == ingredient.id %}selected{% endif %}>{{ ingredient.name }}</option>
+                        {% endfor %}
+                        <option value="add-new-ingredient">Add New Ingredient...</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary" onclick="removeField(this)">Remove</button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-primary mb-3" onclick="addIngredientField()">Add Ingredient</button>
+
+
+        <br>
+
+        <!-- Cooking Duration Field -->
+        <div class="mb-3">
+            <!-- Correct 'for' attribute matches the id 'cooking_duration' -->
+            <label for="cooking_duration" class="form-label">Cooking Duration (in minutes)</label>
+            <input type="number" id="cooking_duration" name="cooking_duration" class="form-control"  value="{% if recipe %}{{ recipe.duration }}{% endif %}" placeholder="Enter duration in minutes" min="1" required>
+        </div>
+        
+        <button id="myForm" type="submit" class="btn btn-success w-100">{% if recipe %}Update Recipe{% else %}Add Recipe{% endif %}</button>
+    </form>
+</div>
+
+
+<!-- Modal for Adding New Ingredient -->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" aria-labelledby="addIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="color: black;">
+            <form id="add-ingredient-form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addIngredientModalLabel">Add New Ingredient</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ingredient_name" class="form-label">Ingredient Name</label>
+                        <input type="text" id="ingredient_name" name="ingredient_name" class="form-control" placeholder="Enter ingredient name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addIngredient()">Save Ingredient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding New Food Type -->
+<div class="modal fade" id="addFoodTypeModal" tabindex="-1" aria-labelledby="addFoodTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="color: black;">
+            <form id="add-food-type-form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFoodTypeModalLabel">Add New Food Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Food Type Name</label>
+                        <input type="text" id="type" name="type" class="form-control" placeholder="Enter food type name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Enter food type description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addFoodType()">Save Food Type</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addMethodModal" tabindex="-1" aria-labelledby="addMethodModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="color: black;">
+            <form id="add-method-form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMethodModalLabel">Add New Cooking Method</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="method_name" class="form-label">Method Name</label>
+                        <input type="text" id="method_name" name="method_name" class="form-control" placeholder="Enter cooking method" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addMethod()">Save Method</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById("myForm").addEventListener("submit", function(event) {  
+        event.preventDefault();  
+        console.log("Form submitted");
+        // You might want to validate the form before submitting it, to ensure required fields are filled.
+        this.submit();  // Now it will submit the form after validation if needed.
+    });
+
+    document.getElementById('cooking_method').addEventListener('change', function () {
+        if (this.value === 'add-new-method') {
+            this.value = ''; // Reset the selection
+            new bootstrap.Modal(document.getElementById('addMethodModal')).show();
+        }
+    });
+
+    function addMethod() {
+        const form = document.getElementById('add-method-form');
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch("{% url 'add_method' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close the modal
+                const methodModal = bootstrap.Modal.getInstance(document.getElementById('addMethodModal'));
+                methodModal.hide();
+
+                // Reset the form
+                form.reset();
+
+                // Add the new method to the dropdown
+                const methodSelect = document.getElementById('cooking_method');
+                const newOption = document.createElement('option');
+                newOption.value = data.method_id;
+                newOption.textContent = data.method_name;
+                methodSelect.appendChild(newOption);
+
+                // Select the newly added method
+                methodSelect.value = data.method_id;
+            } else {
+                alert(data.error || 'Error while adding method.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error while adding method.');
+        });
+    }
+
+    // Track the dropdown that triggered the "Add New Ingredient" action
+    let currentIngredientDropdown = null;
+
+    document.getElementById('ingredients-container').addEventListener('change', function(e) {
+        if (e.target && e.target.matches('select[name="ingredients[]"]')) {
+            if (e.target.value === 'add-new-ingredient') {
+                // Store the current dropdown
+                currentIngredientDropdown = e.target;
+                // Show the modal
+                new bootstrap.Modal(document.getElementById('addIngredientModal')).show();
+            }
+        }
+    });
+
+    function addIngredient() {
+        const form = document.getElementById('add-ingredient-form');
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch("{% url 'add_ingredient' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close the modal
+                const ingredientModal = bootstrap.Modal.getInstance(document.getElementById('addIngredientModal'));
+                ingredientModal.hide();
+
+                // Reset the form
+                form.reset();
+
+                // Add the new ingredient to all dropdowns
+                const ingredientSelects = document.querySelectorAll('select[name="ingredients[]"]');
+                ingredientSelects.forEach(select => {
+                    const newOption = document.createElement('option');
+                    newOption.value = data.ingredient_id;
+                    newOption.textContent = data.ingredient_name;
+                    select.appendChild(newOption);
+                });
+
+                // Select the newly added ingredient in the dropdown that triggered the action
+                if (currentIngredientDropdown) {
+                    currentIngredientDropdown.value = data.ingredient_id;
+                }
+
+                // Reset the tracked dropdown
+                currentIngredientDropdown = null;
+            } else {
+                alert(data.error || 'Error while adding ingredient.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error while adding ingredient.');
+        });
+    }
+
+    function addIngredientField() {
+        const container = document.getElementById('ingredients-container');
+        const field = document.createElement('div');
+        field.classList.add('input-group', 'mb-2');
+        field.innerHTML = `
+            <select name="ingredients[]" class="form-select">
+                <option value="" selected disabled>Select ingredient</option>
+                {% for ingredient in ingredients %}
+                    <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
+                {% endfor %}
+                <option value="add-new-ingredient">Add New Ingredient...</option>
+            </select>
+            <button type="button" class="btn btn-secondary" onclick="removeField(this)">Remove</button>
+        `;
+        container.appendChild(field);
+    }
+
+    function removeField(button) {
+        button.parentElement.remove();
+    }
+
+    document.getElementById('food_type').addEventListener('change', function() {
+        if (this.value === 'add-new-type') {
+            this.value = ''; // Reset the selection
+            new bootstrap.Modal(document.getElementById('addFoodTypeModal')).show();
+        }
+    });
+
+    function addFoodType() {
+        const form = document.getElementById('add-food-type-form');
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch("{% url 'add_food_type' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close the modal
+                const foodTypeModal = bootstrap.Modal.getInstance(document.getElementById('addFoodTypeModal'));
+                foodTypeModal.hide();
+
+                // Reset the form
+                form.reset();
+
+                // Add the new food type to the dropdown
+                const foodTypeSelect = document.getElementById('food_type');
+                const newOption = document.createElement('option');
+                newOption.value = data.food_type_id;
+                newOption.textContent = data.food_type_name;
+                foodTypeSelect.appendChild(newOption);
+
+                // Select the newly added food type
+                foodTypeSelect.value = data.food_type_id;
+            } else {
+                alert(data.error || 'Error while adding food type.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error while adding food type.');
+        });
+    }
+
+</script>
+{% endblock %}

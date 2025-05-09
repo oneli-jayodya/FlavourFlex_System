@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="recipe-detail">
+    <h1>{{ recipe.name }}</h1>
+    <p><strong>Description:</strong> {{ recipe.description }}</p>
+    <p><strong>Type:</strong> {{ recipe.food_type.type }}</p>
+    <p><strong>Preparation Time:</strong> {{ recipe.duration }} Minutes</p>
+
+    <p><strong>Method:</strong> {{ recipe.method.name }}</p>
+
+    <h3>Ingredients:</h3>
+    <ul>
+      {% for ingredient in recipe.ingredients.all %}
+        <li>{{ ingredient.name }}</li>
+      {% empty %}
+        <li>No ingredients listed.</li>
+      {% endfor %}
+    </ul>
+
+    <div class="actions">
+      {% if user.is_authenticated and recipe.can_edit %}
+        <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-warning">Edit Recipe</a>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteRecipeId('{{ recipe.id }}')">Delete Recipe</button>
+      {% endif %}
+      
+      <a href="{% url 'list_recipes' %}" class="btn btn-secondary">Back to Recipes</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Comments for {{ recipe.name }}</h3>
+    {% for comment in comments %}
+        <div class="comment my-3 p-3 border rounded">
+            <strong>{{ comment.user.username }}</strong>
+            <p>{{ comment.text }}</p>
+            <small>{{ comment.created_at }}</small>
+
+            {% if comment.user == user %}
+                <a href="{% url 'edit_comment' recipe.id comment.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <form method="post" action="{% url 'delete_comment' recipe.id comment.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}  
+
+{% block content %}  
+<!-- Modal for confirmation -->  
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">  
+    <div class="modal-dialog" role="document">  
+        <div class="modal-content">  
+            <div class="modal-header">  
+                <h5 class="modal-title" id="confirmationModalLabel" style="color: black;">Confirm Action</h5>  
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">  
+                    <span aria-hidden="true">&times;</span>  
+                </button>  
+            </div>  
+            <div class="modal-body" style="color: black;">  
+                <p id="modalMessage">Are you sure you want to proceed?</p>  
+            </div>  
+            <div class="modal-footer">  
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>  
+                <button type="button" class="btn btn-danger" id="confirmButton">Confirm</button>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+
+<!-- Main content -->  
+<table class="table">  
+    <thead>  
+        <tr style="color: aliceblue;">  
+            <th>Username</th>  
+            <th>Requested Role</th>  
+            <th>Comment Count</th>  
+            <th>Status</th>  
+            <th>Actions</th>  
+        </tr>  
+    </thead>  
+    <tbody>  
+        {% for request in requests %}  
+        <tr style="color: rgb(235, 205, 157);">  
+            <td>{{ request.user.username }}</td>  
+            <td>{{ request.requested_role }}</td>
+            <td>{{ comment_count_dict.request.user.id|default:"0" }}</td>  
+            <td>{{ request.status }}</td>  
+            <td>  
+                <button class="btn btn-success" onclick="openModal('approve', '{{ request.id }}')">Approve</button>  
+                <button class="btn btn-danger" onclick="openModal('deny', '{{ request.id }}')">Deny</button>  
+            </td>  
+        </tr>  
+        {% endfor %}  
+    </tbody>  
+</table>  
+
+<!-- JavaScript for Modal Functionality -->  
+<script>  
+    let currentAction; // Track current action  
+    let currentRequestId; // Track the current request ID  
+
+    function openModal(action, requestId) {  
+        currentAction = action;  
+        currentRequestId = requestId;  
+
+        // Update modal message  
+        const message = `Are you sure you want to ${action} this request?`;  
+        document.getElementById('modalMessage').textContent = message;  
+
+        // Show the modal  
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));  
+        modal.show();  
+    }  
+
+    document.getElementById('confirmButton').addEventListener('click', function() {  
+        // Create a form and submit  
+        const form = document.createElement('form');  
+        form.method = 'POST';  
+        form.action = ''; // Replace this with the URL to which the form will be submitted  
+
+        // Create input fields for request_id and action  
+        const inputRequestId = document.createElement('input');  
+        inputRequestId.type = 'hidden';  
+        inputRequestId.name = 'request_id';  
+        inputRequestId.value = currentRequestId;  
+
+        const inputAction = document.createElement('input');  
+        inputAction.type = 'hidden';  
+        inputAction.name = 'action';  
+        inputAction.value = currentAction;  
+
+        // Append inputs to the form  
+        form.appendChild(inputRequestId);  
+        form.appendChild(inputAction);  
+        
+        // Send the CSRF token in the header  
+        const csrfToken = "{{ csrf_token }}"; // Django CSRF token  
+        const inputCsrf = document.createElement('input');  
+        inputCsrf.type = 'hidden';  
+        inputCsrf.name = 'csrfmiddlewaretoken';  
+        inputCsrf.value = csrfToken;  
+
+        form.appendChild(inputCsrf);  
+
+        // Append the form to the body and submit it  
+        document.body.appendChild(form);  
+        form.submit();  
+    });  
+</script>  
+
+{% endblock %}

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body{
+            background-color: white;
+        }
+        section{
+            width: 100%;
+            height: 100vh;
+            padding-top: 100px;
+        }
+        #Home{
+            margin-bottom: 25px;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space between logo and other elements */
+            background: rgb(50, 78, 79);
+            position: fixed;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: wheat;
+            padding: 10px 20px; /* Adjust padding for spacing */
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FB8F4D;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .logo span {
+            color: #FFD700;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex; /* Flexbox for centering the links */
+            justify-content: center;
+            flex-grow: 1; /* Push the links to the center */
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: rgb(198, 233, 202);
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 20px;
+        }
+
+        nav ul li a:hover {
+            color: #facc22;
+        }
+
+        .auth-buttons {
+           display: flex;
+           margin-right: 20%;
+            /* align-items: center; Align buttons with the nav links */ 
+            gap: 10px;
+        }
+
+        .auth-buttons button {
+            padding: 7px 15px;
+            border: 2px solid #f8f7f5;
+            border-radius: 20px;
+            background-color: transparent;
+            color: #fafafa;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .register-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #FB8F4D; /* Your preferred button color */
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background-color: #d97339; /* A darker shade for hover effect */
+        }
+
+        .login-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #0e8a52; /* Your preferred button color */
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background-color: #05cf48;
+        }
+
+
+        .dropdown-container {
+            position: absolute;
+            right: 20px; /* Position dropdown on the right corner */
+        }
+
+        select {
+            padding: 8px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+        }
+
+        section .main{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            position: relative;
+        }
+
+        section .main .main_text h3{
+            color: rgb(7, 93, 18);
+            font-size: 55px;
+            position: relative;
+            top: -25px;
+            left: 45%;
+        }
+
+        section .main .main_text h3 span{
+            color: #d5a909;
+            font-family: polo;
+        }
+        section .main .main_text p{
+            color: rgb(8, 9, 8);
+            width: 800px;
+            position: relative;
+            top: 5px;
+            left: 2%;
+            padding-bottom:10px;
+            line-height: 20px;
+            text-align: justify;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        section .main .main_image img{
+            width: 600px;
+        }
+
+
+        /*--About--*/
+
+        .about{
+            width: 100%;
+            height: 100vh;
+            padding: 10px 0 0 0;
+            background-image: url(image/about_bg.jpg);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .about .about_main{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .about .about_main .about_image img{
+            width: 750px;
+        }
+
+        .about .about_main .about_text h1{
+            font-size: 45px;
+            position: relative;
+            bottom: 40px;
+        }
+
+        .about .about_main .about_text h1 span{
+            color: #facc22;
+            margin-right: 15px;
+        }
+
+        .about .about_main .about_text h3{
+            position: relative;
+            bottom: 10px;
+            font-size: 25px;
+        }
+
+        .about .about_main .about_text p{
+            width: 650px;
+            text-align: justify;
+            line-height: 23px;
+            margin-top: 20px;
+        }
+
+        
+
+        /*Gallery*/
+
+        .gallery{
+            width: 100%;
+            padding: 35px 0 50px 0;
+        }
+
+        .gallery h1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+        }
+
+        .gallery h1 span{
+            color: #facc22;
+            margin-left: 15px;
+        }
+
+        .gallery .gallery_box{
+            width: 95%;
+            margin: 50px auto 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 10px;
+        }
+
+        .gallery .gallery_box .gallery_image{
+            width: 470px;
+            height: 350px;
+            margin: 0 auto;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .gallery .gallery_box .gallery_image img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .gallery .gallery_box .gallery_image:hover img{
+            transform: scale(1.1);
+        }
+
+        /* Dropdown Styling */
+        .dropdown-container {
+            position: absolute;
+            right: 20px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+        }
+
+        /*Footer*/
+
+        footer{
+            width: 100%;
+            padding: 30px 0 0 20px;
+            background: #eeeeee;
+        }
+
+        footer .footer_main{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        footer .footer_main .footer_tag{
+            text-align: center;
+        }
+
+        footer .footer_main .footer_tag h2{
+            color: #000;
+            margin-bottom: 25px;
+            font-size: 30px;
+        }
+
+        footer .footer_main .footer_tag p{
+            margin: 10px 0;
+        }
+
+        footer .footer_main .footer_tag i{
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        footer .footer_main .footer_tag i:hover{
+            color: #facc22;
+        }
+
+        footer .end{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        footer .end span{
+            color: #facc22;
+            margin-left: 10px;
+        }
+
+        .copyright {
+        font-size: 12px;
+        text-align: center;
+        padding-bottom: 10px;
+        }
+
+        .copyright a {
+        text-decoration: none;
+        color: #343c41;
+        }
+
+        ::-webkit-scrollbar{
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background: #facc22;
+            border-radius: 30px;
+        }
+
+        .anim{
+            opacity: 0;
+            transform: translateY(40px);
+            animation: moveup 0.5s linear forwards;
+        }
+
+        @keyframes moveup{
+            100%{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        @keyframes animate{
+            0%{
+                transform: scale(1.1);
+            }
+            50%{
+                transform: scale(1);
+            }
+            100%{
+                transform: scale(1.1);
+            }
+        }
+   
+       /* Chat Container */
+#chat-container {
+    width: 600px;
+    height: 80vh; /* Set a fixed height for the chat container */
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Messages Container */
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Scrollbar Styling */
+#messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+/* Message Styling */
+.bot-message,
+.user-message {
+    margin: 0;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 70%;
+    font-size: 16px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    position: relative;
+}
+
+.bot-message {
+    background-color: #206c45;
+    color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.user-message {
+    background-color: #4CAF50;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+/* Button Container Styling */
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 8px 15px;
+    background-color: #FB8F4D;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e07940;
+}
+
+/* Input Container Styling */
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ingredient-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.ingredient-input:focus {
+    border-color: #FB8F4D;
+}
+
+/* Submit Button Styling */
+#submit-ingredients {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#submit-ingredients:hover {
+    background-color: #63ad73;
+}
+        #recipe {
+            padding: 20px;
+            background-color: #f8f9fa; /* Light background for recipe section */
+        }
+
+        #recipe .card {
+            border: 1px solid #264334;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Add slight shadow to card */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 40px;
+            color: #ccc;
+            background-color: #264334;
+            width: 100%; /* Cards will take full width by default */
+            margin-bottom: 20px; /* Space between cards */
+        }
+
+        #recipe .card:hover {
+            transform: translateY(-10px); /* Hover effect for cards */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+        }
+
+        #recipe .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #FB8F4D; /* Custom color for title */
+            margin-bottom: 10px; /* Space below the title */
+        }
+
+        #recipe .card-text {
+            font-size: 1rem;
+            color: #e8edf1; /* Lighter text for description */
+            margin-bottom: 15px; /* Space at the bottom of text */
+        }
+
+        #recipe .btn-primary {
+            background-color: #FB8F4D; /* Matching button color */
+            border-color: #FB8F4D;
+            transition: background-color 0.3s ease;
+            padding: 8px 16px; /* Adjust button padding */
+            font-size: 14px; /* Slightly smaller button text */
+        }
+
+        #recipe .btn-primary:hover {
+            background-color: #e07b3c; /* Darker shade on hover */
+            border-color: #e07b3c;
+        }
+
+        #recipe .row {
+            display: flex; /* Flexbox layout */
+            flex-wrap: wrap; /* Allow wrapping of cards */
+            gap: 20px; /* Space between cards */
+            justify-content: center; /* Center align cards */
+        }
+
+        #recipe .col-md-4 {
+            flex: 1 1 calc(33.333% - 20px); /* Three columns on larger screens */
+            display: flex;
+            justify-content: center; /* Center each card */
+            margin-bottom: 20px;
+        }
+
+        
+        /* Responsive Styling for smaller screens */
+        @media (max-width: 768px) {
+            #recipe .col-md-4 {
+                flex: 1 1 100%; /* Stack cards in a single column on small screens */
+                margin-bottom: 15px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <nav>
+
+        <h2 class="logo">Flavour<span>Flex</span></h2>
+
+        <ul>
+            <li><a href="#Home" data-translate-key="home">Home</a></li>
+            <li><a href="#aboutpage" data-translate-key="about">About</a></li>
+            <li><a href="#recipe" data-translate-key="chatbot">Recipe</a></li>
+            <li><a href="#photo" data-translate-key="gallery">Gallery</a></li>
+        </ul>
+
+        <div class="auth-buttons">
+            <a href="{% url 'login' %}" class="login-btn" data-translate-key="login">Login</a>
+            <a href="{% url 'register' %}" class="register-btn" data-translate-key="register">Registration</a>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="dropdown-container">
+            <form>
+                <label for="language" data-translate-key="lang">Select Language:</label>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="ja">日本語</option>
+                    <option value="en" selected>English</option>
+                    <option value="si">සිංහල</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+            </form>
+        </div>
+
+    </nav>
+
+    <section id="Home">
+ 
+        
+
+        <div class="main anim">
+
+            <div class="main_text">
+
+                <h3 data-translate-key="topic">Make New<span> Food</span> in a Easy Way</h3>
+                <p data-translate-key="start_up"> 
+                    "Turn simple ingredients into amazing dishes with step-by-step instructions that anyone can follow. Explore the joy of creating tasty meals with minimal effort and maximum flavor!"
+                <br><br>
+                </p>
+
+                <div class="container">
+                    <div id="chat-container">
+                        <div id="messages"></div>
+                        <div id="ingredient-input-container" style="display: none;">
+                            <input type="text" id="ingredient-input" placeholder="Enter ingredients, separated by commas">
+                            <button id="submit-ingredients">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="main_image">
+                <img src="static/assets/giphy.gif">
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!--About-->
+<section id="aboutpage">
+    
+    <div class="about" >
+
+        <div class="about_main">
+
+            <div class="about_image">
+                <img src="static/assets/blog_11.jpg">
+            </div>
+
+            <div class="about_text">
+
+                <h1 data-translate-key="about_title">About Us</h1>
+                <h3 data-translate-key="why_choose">Why Choose FlavourFlex?</h3>
+                <p data-translate-key="about_text">
+                    <b>Personalized Recipes, AI-Powered Flexibility, Discover New Flavors, Real-Time Suggestions </b><br>
+                    FlavourFlex is your ultimate recipe companion, designed to simplify meal planning and make cooking effortless. 
+                    Our AI-powered system helps you discover delicious recipes tailored to the ingredients you already have, reducing waste and saving time. 
+                    With fuzzy logic technology, we handle incomplete or misspelled inputs to ensure accurate suggestions, while offering real-time 
+                    alternatives for ingredients to suit your taste. Whether you’re a busy professional or a culinary explorer, FlavourFlex provides a seamless, 
+                    user-friendly experience to inspire your next meal.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="recipe">
+<h3 style="text-align: center; font-size: 30px; font-weight: 800; padding: 10px;" data-translate-key="recipe"> RECIPES </h3>
+    <div class="row mt-4">
+        {% for recipe in recipes %}
+        <div class="col-md-4">
+            <div class="card text-dark bg-light mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <p class="card-text">A delicious recipe to try!</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No recipes found.</p>
+        {% endfor %}
+    </div>
+</section>
+
+
+    <!--Gallery-->
+<section id="photo">
+    <div class="gallery">
+
+        <span data-translate-key="popular" style="font-size: 50px; align-items: center; font-weight: 700; margin-left: 40%; color: #d5a909;">Popular </span><span data-translate-key="Gallery"  style="font-size: 50px; align-items: center; font-weight: 700; color: #206c45;">Gallery</span>
+
+        <div class="gallery_box">
+
+            <div class="gallery_image">
+                <img src="static/assets/gallary_1.jpg">
+            </div>
+
+            <div class="gallery_image">
+                <img src="static/assets/gallary_2.jpg">
+            </div>
+
+            <div class="gallery_image">
+                <img src="static/assets/gallary_3.webp">
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+    <!--Footer-->
+<div id="footer">
+    <footer>
+
+        <div class="footer_main">
+
+            <div class="footer_tag">
+
+                <h2>Location</h2>
+                <p>Sri Lanka</p>
+                <p>USA</p>
+                <p>India</p>
+                <p>Japan</p>
+                <p>Italy</p>
+
+            </div>
+
+            <div class="footer_tag">
+
+                <h2>Quick Link</h2>
+                <p>Home</p>
+                <p>About</p>
+                <p>Recipe</p>
+                <p>Gallery</p>
+
+            </div>
+
+            <div class="footer_tag">
+
+                <h2>Contact</h2>
+                <p>+94 12 3456 789</p>
+                <p>+94 25 5568 456</p>
+                <p>oneli@gmail.com</p>
+                <p>akindu@gmail.com</p>
+                <p>achinthya@gmail.com</p>
+            </div>
+
+            <div class="footer_tag">
+
+                <h2>Our Services</h2>
+                <p>Chat Bot</p>
+                <p>Easy Search Recipe</p>
+                <p>Post Recipe</p>
+
+            </div>
+
+            <div class="footer_tag">
+
+                <h2>Follows</h2>
+                <i class="fa-brands fa-facebook-f"></i>
+                <i class="fa-brands fa-twitter"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-linkedin-in"></i>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script>
+
+        // Translations object
+    const translations = {
+        "en": {
+            "home": "Home",
+            "about": "About",
+            "chatbot": "Recipe",
+            "gallery": "Gallery",
+            "login": "Login",
+            "register": "Registration",
+            "recipe":"Recipe",
+            "popular":"Popular",
+            "Gallery":"Gallery",
+            "lang":"Select Language : ",
+            "topic":"Make New Food In a Easy Way",
+            "start_up": "Turn simple ingredients into amazing dishes with step-by-step instructions that anyone can follow. Explore the joy of creating tasty meals with minimal effort and maximum flavor!",
+            "about_title": "About Us",
+            "why_choose": "Why Choose FlavourFlex?",
+            "about_text": "Personalized Recipes, AI-Powered Flexibility, Discover New Flavors, Real-Time Suggestions FlavourFlex is your ultimate recipe companion, designed to simplify meal planning and make cooking effortless. Our AI-powered system helps you discover delicious recipes tailored to the ingredients you already have, reducing waste and saving time. With fuzzy logic technology, we handle incomplete or misspelled inputs to ensure accurate suggestions, while offering real-time alternatives for ingredients to suit your taste. Whether you’re a busy professional or a culinary explorer, FlavourFlex provides a seamless, user-friendly experience to inspire your next meal.",
+            "Location":"Location",            
+        },
+        "ja": {
+            "home": "ホーム",
+            "about": "約",
+            "chatbot": "レシピ ",
+            "gallery": "ギャラリー",
+            "login": "ログイン",
+            "register": "登録",
+            "recipe":"レシピ",
+            "lang":"言語を選択 : ",
+            "popular":"人気の",
+            "Gallery":"レシピ",
+            "topic":"簡単な方法で新しい料理を作る",
+            "start_up": "シンプルな食材を使って、誰でも従えるステップバイステップの手順で素晴らしい料理を作りましょう。最小限の労力で最大限の風味を引き出し、美味しい食事を作る喜びを楽しんでください！",
+            "about_title": "私たちについて",
+            "why_choose": "なぜFlavourFlexを選ぶのか？",
+            "about_text": "パーソナライズされたレシピ、AI駆動の柔軟性、新しいフレーバーの発見、リアルタイムの提案 FlavourFlexは、食事の計画を簡単にし、料理を手軽にするために設計された究極のレシピコンパニオンです。当社のAI搭載システムは、すでにお持ちの食材に合わせた美味しいレシピを発見するお手伝いをし、無駄を減らし、時間を節約します。ファジーロジック技術を使用して、不完全または綴りが間違った入力を処理し、正確な提案を保証します。また、お好みに合わせて材料のリアルタイム代替案を提供します。忙しいプロフェッショナルであれ、料理探検家であれ、FlavourFlexは次の食事にインスピレーションを与えるシームレスで使いやすい体験を提供します。",
+            "welcome": "FlavourFlexへようこそ！今日はどのようにお手伝いできますか？",
+            "start_recipe": "レシピを始める",
+            "view_recipes": "レシピを見る",
+            "do_you_have": "{ingredient}がありますか？",
+            "sorry_no_recipes": "申し訳ありませんが、材料に合ったレシピが見つかりませんでした。",
+            "based_on_ingredients": "材料に基づいて作れるもの：\n",
+            "view_recipe": "レシピを見る",
+            "ingredients": {
+                "Carrot": "にんじん",
+                "Tomato": "トマト",
+                "Egg": "卵",
+                "Rice": "ご飯",
+                "Cucumber": "きゅうり"
+            },
+            "recipes": {
+                "CarrotEggStirFry": "にんじんと卵の炒め物",
+                "TomatoFriedRice": "トマトチャーハン",
+                "CucumberSalad": "きゅうりのサラダ"
+            }
+        },
+        "si": {
+            "home": "මුල් පිටුව",
+            "about": "අප ගැන",
+            "chatbot": "කෑම වට්ටෝරු",
+            "gallery": "ගැලරිය",
+            "login": "ඇතුල් වන්න",
+            "register": "ලියාපදිංචි වන්න",
+            "recipe":"ආහාර වට්ටෝරු",
+            "lang":"භාෂාව තෝරන්න : ",
+            "popular":"ප්‍රසිද්ධ", 
+            "Gallery":"ආහාර වට්ටෝරු රූප",
+            "topic":"අලුත් ආහාර සරල අයුරින් සදන්න",
+            "start_up": "සරල අමුද්‍රව්‍ය භාවිතයෙන් සැහැල්ලු පියවර අනුගමනය කරමින් කෑම පිසවන්න. අවම ප්‍රයත්නයක් සහිතව උපරිම රසයෙන් යුතු රසවත් ආහාර සැකසීමේ සන්සුන්මය ආනන්දය සොයා ගන්න!",
+            "about_title": "අපි ගැන",
+            "why_choose": "FlavourFlex ඇයි තෝරාගත යුතුද?",
+            "about_text": "පිළිවෙල ගැන්වූ වට්ටෝරු, AI බලගැන්වූ ව්‍යවහාරතාවය, නව රසවල අත්දැකීම, සජීවී යෝජනා FlavourFlex ඔබේ සම්පුර්ණ වට්ටෝරු මිතුරෙකි, ආහාර සැකසීම පහසු කරමින් පිසීමක් නිවෙසක් ලෙසින් සැලසෙයි. අපේ AI බලගැන්වූ පද්ධතිය ඔබ ළඟ ඇති අමුද්‍රව්‍ය වලට ගැලපෙන රසවත් වට්ටෝරු සොයා ගැනීමට සහාය වන අතර, අපද්‍රව්‍ය අඩුකරමින් කාලය සුරකිනු ලැබේ. උච්චිත ලොජික් තාක්‍ෂණය මඟින් අප සම්පූර්ණ නොවූ හෝ වැරදි ලෙස ඇතුළත් කළ තොරතුරු සැකසීමේදී නිවැරදි යෝජනා ලබා දේ. එසේම, ඔබේ රස වින්‍යාසයට ගැලපෙන අමුද්‍රව්‍ය සඳහා සජීවී විකල්ප ලබා දෙනු ලබයි. ඔබ කාර්යබහුල වෘත්තිකයෙක් හෝ කුස්සියක් අත්දැකීමක් සොයන කෙනෙක් වුවත්, FlavourFlex ඔබේ ඊළඟ ආහාරයට ආභාෂයක් ලබා දෙන කාර්යක්ෂම හා මිතුරු පරිශීලක අත්දැකීමක් ලබා දෙයි.",
+            "welcome": "FlavourFlex වෙත සාදරයෙන් පිළිගනිමු! අද ඔබට කෙසේ උපකාර කළ හැකිද?",
+            "start_recipe": "රෙසිපි ආරම්භ කරන්න",
+            "view_recipes": "රෙසිපි බලන්න",
+            "do_you_have": "{ingredient} තිබේද?",
+            "sorry_no_recipes": "කණගාටුයි, ඔබේ අමුද්‍රව්‍යවලින් කිසිදු රෙසිපි සොයාගත නොහැකි විය.",
+            "based_on_ingredients": "ඔබේ අමුද්‍රව්‍ය අනුව ඔබට සාදාගත හැක:\n",
+            "view_recipe": "රෙසිපි බලන්න",
+            "ingredients": {
+                "Carrot": "කැරට්",
+                "Tomato": "තක්කාලි",
+                "Egg": "බිත්තරය",
+                "Rice": "සැර",
+                "Cucumber": "පිපිඤ්ඤා"
+            },
+            "recipes": {
+                "CarrotEggStirFry": "කැරට් සහ බිත්තරය හොදින් මෝරාගත් ආහාරය",
+                "TomatoFriedRice": "තක්කාලි ෆ්‍රයිඩ් රයිස්",
+                "CucumberSalad": "පිපිඤ්ඤා සලාදය"
+            }
+        },
+        "ta": {
+            "home": "முகப்பு",
+            "about": "எங்களை பற்றி",
+            "chatbot": "சமையல் குறிப்பு",
+            "gallery": "படவொளி",
+            "login": "உள்நுழைய",
+            "register": "பதிவு",
+            "lang":"மொழியை : ",
+            "recipe":"சமையல்",
+            "popular":"பிரபலமான",
+            "Gallery": "சமையல்",
+            "topic":"புதிய உணவை எளிய முறையில் தயாரிக்கவும்",
+            "start_up": "எளிய பொருட்களை பயன்படுத்தி யாரும் பின்பற்றக்கூடிய எளிய படிநிலைகளுடன் அற்புதமான உணவுகளை தயாரிக்கவும்.குறைந்த முயற்சியுடன் அதிக சுவையைக் கொண்ட ருசியான உணவுகளை உருவாக்கும் மகிழ்ச்சியை அனுபவிக்கவும்!",
+            "about_title": "எங்களை பற்றி",
+            "why_choose": "FlavourFlexஐ ஏன் தேர்ந்தெடுக்க வேண்டும்?",
+            "about_text": "தனிப்பயன் சமையல் குறிப்புகள், AI-இனால் இயக்கப்படும் இலகுவான தன்மை, புதிய சுவைகளை கண்டறிதல், நேரடி பரிந்துரைகள் FlavourFlex உங்கள் கடைசி சமையல் துணையாக இருக்கிறது, உணவுத் திட்டத்தை எளிதாக்கி சமைப்பதை சுலபமாக மாற்றுகிறது. எங்கள் AI இயக்கப்பட்ட அமைப்பு உங்களிடம் ஏற்கனவே உள்ள பொருட்களுக்கேற்ப சிறந்த சுவைமிகுந்த சமையல் குறிப்புகளை கண்டுபிடிக்க உதவுகிறது, அழிவை குறைத்து நேரத்தைச் சேமிக்கிறது. அசுத்தமான அல்லது தவறாக உள்ளிடப்பட்ட தரவுகளை நாங்கள் கைங்கரியத்துடன் பராமரிக்கும் போது, சரியான பரிந்துரைகளை வழங்கவும், உங்கள் சுவைக்கு பொருந்தும் பொருட்களுக்கான நேரடி மாற்றங்களை வழங்கவும் FlavourFlex உதவுகிறது. நீங்கள் ஒரு பிஸியான நிபுணரா அல்லது சமையலறை ஆராய்ச்சியாளரா இருந்தாலும், FlavourFlex உங்கள் அடுத்த உணவுக்கான பேரறிவைக் கொடுக்கும் மென்மையான, பயனுள்ள அனுபவத்தை வழங்குகிறது.",
+            "welcome": "FlavourFlexக்கு வரவேற்கிறோம்! இன்று நான் உங்களுக்கு எப்படி உதவலாம்?",
+            "start_recipe": "சமையல் தொடங்கவும்",
+            "view_recipes": "சமையல் குறிப்புகளை பார்க்கவும்",
+            "do_you_have": "உங்களிடம் {ingredient} இருக்கிறதா?",
+            "sorry_no_recipes": "மன்னிக்கவும், உங்கள் பொருட்களுடன் எந்த சமையல் குறிப்புகளையும் கண்டுபிடிக்க முடியவில்லை.",
+            "based_on_ingredients": "உங்கள் பொருட்களின் அடிப்படையில் கண்டுபிடிக்கப்பட்டது: {result}.",
+            "ingredients": {
+                "Carrot": "காரட்",
+                "Tomato": "தக்காளி",
+                "Egg": "முட்டை",
+                "Rice": "அரிசி",
+                "Cucumber": "வெள்ளரிக்காய்"
+            },
+            "recipes": {
+                "Carrot and Egg Stir Fry": "காரட் மற்றும் முட்டை ஸ்டிர் ஃப்ரை",
+                "Tomato Fried Rice": "தக்காளி பசைவிரும்பிய அரிசி",
+                "Cucumber Salad": "வெள்ளரிக்காய் சலாட்"
+            },
+            }
+    };
+
+    // Change Language Function
+    function changeLanguage() {
+            const selectedLanguage = document.getElementById("language").value;
+            document.querySelectorAll("[data-translate-key]").forEach(el => {
+                const key = el.getAttribute("data-translate-key");
+                if (translations[selectedLanguage][key]) {
+                    el.textContent = translations[selectedLanguage][key];
+                }
+            });
+        }
+
+        // Set default language to Japanese on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const languageSelector = document.getElementById("language");
+            languageSelector.value = "ja"; // Set the dropdown to Japanese
+            changeLanguage(); // Update the text content to Japanese
+        });
+
+        let selectedFoodTypeId = null;
+let selectedMethodId = null;
+let userIngredients = [];
+let rejectedIngredients = []; // List to track rejected ingredients
+let suggestedIngredients = [];
+let currentSuggestionIndex = 0;
+
+// Display messages in the chat
+// Display messages in the chat
+function displayMessage(message, sender, clickableOptions = []) {
+    const messageDiv = document.createElement("div");
+
+    // Apply the correct class for the sender (user or bot)
+    messageDiv.classList.add(sender === "user" ? "user-message" : "bot-message");
+    messageDiv.textContent = message;
+
+    if (clickableOptions.length > 0) {
+        const buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("button-container");
+
+        // Align buttons to the left for bot, and right for user
+        buttonContainer.style.display = "flex";
+        buttonContainer.style.flexDirection = sender === "user" ? "row-reverse" : "row";
+
+        clickableOptions.forEach(btn => {
+            const button = document.createElement("button");
+            button.textContent = btn.text;
+            button.onclick = btn.action;
+            button.classList.add("btn");
+            buttonContainer.appendChild(button);
+        });
+        messageDiv.appendChild(buttonContainer);
+    }
+
+    const messages = document.getElementById("messages");
+    messages.appendChild(messageDiv);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+// Ask for food type
+function askFoodType() {
+    fetch('/get_food_types/')
+        .then(response => response.json())
+        .then(data => {
+            const buttons = data.map(foodType => ({
+                text: foodType.type,
+                action: () => {
+                    selectedFoodTypeId = foodType.id;
+                    displayMessage(foodType.type, "user");
+                    askIngredients(); // Move to asking ingredients
+                }
+            }));
+            displayMessage("What type of food do you want to cook?", "bot", buttons);
+        })
+        .catch(error => {
+            console.error("Error fetching food types:", error);
+            displayMessage("An error occurred while fetching food types. Please try again.", "bot");
+        });
+}
+
+// Ask for ingredients
+function askIngredients() {
+    displayMessage("What ingredients do you have? (Enter one or more, separated by commas)", "bot");
+
+    const inputContainer = document.getElementById("ingredient-input-container");
+    inputContainer.style.display = "flex";
+
+    const submitButton = document.getElementById("submit-ingredients");
+    submitButton.onclick = () => {
+        const inputField = document.getElementById("ingredient-input");
+        const ingredients = inputField.value.split(',').map(ingredient => ingredient.trim());
+
+        if (ingredients.length > 0) {
+            userIngredients = ingredients;
+            displayMessage(ingredients.join(", "), "user");
+            fetchSuggestedIngredients(); // Move to suggesting additional ingredients
+        } else {
+            displayMessage("Please enter at least one ingredient.", "bot");
+        }
+    };
+}
+
+// Suggest additional ingredients before asking for the cooking method
+function fetchSuggestedIngredients() {
+    fetch('/get_ingredients/')
+        .then(response => response.json())
+        .then(ingredients => {
+            const haveIngredientIds = userIngredients
+                .map(userIngredient => {
+                    const found = ingredients.find(ingredient => ingredient.name.toLowerCase() === userIngredient.toLowerCase());
+                    return found ? found.id : null;
+                })
+                .filter(id => id !== null)
+                .join(',');
+
+            if (!haveIngredientIds) {
+                displayMessage("No valid ingredients found. Please try again.", "bot");
+                return;
+            }
+
+            fetch(`/get_suggested_ingredients/${haveIngredientIds}/`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestedIngredients = data;
+                    currentSuggestionIndex = 0;
+                    askAboutNextIngredient();
+                })
+                .catch(error => {
+                    console.error("Error fetching suggested ingredients:", error);
+                    askMethod(); // If there's an error, move to asking method
+                });
+        })
+        .catch(error => {
+            console.error("Error fetching ingredients:", error);
+            displayMessage("An error occurred while fetching ingredients. Please try again.", "bot");
+        });
+}
+
+// Ask user if they have the suggested ingredient
+function askAboutNextIngredient() {
+    if (currentSuggestionIndex < suggestedIngredients.length) {
+        const ingredient = suggestedIngredients[currentSuggestionIndex];
+        displayMessage(`Do you have ${ingredient.name}?`, "bot", [
+            {
+                text: "Yes",
+                action: () => handleIngredientResponse(ingredient, true)
+            },
+            {
+                text: "No",
+                action: () => handleIngredientResponse(ingredient, false)
+            }
+        ]);
+    } else {
+        askMethod(); // After suggested ingredients, ask for the cooking method
+    }
+}
+
+// Handle ingredient response
+function handleIngredientResponse(ingredient, userHasIngredient) {
+    const message = userHasIngredient
+        ? `Added ${ingredient.name} to your ingredients.`
+        : `Skipped ${ingredient.name}.`;
+
+    // Display the user's action on the right side
+    displayMessage(message, "user");
+
+    if (userHasIngredient) {
+        userIngredients.push({ id: ingredient.id, name: ingredient.name.toLowerCase() });
+    }
+
+    currentSuggestionIndex++;
+    askAboutNextIngredient();  // Continue to the next ingredient suggestion
+}
+
+// Ask for cooking method after suggesting ingredients
+function askMethod() {
+    fetch('/get_methods/')
+        .then(response => response.json())
+        .then(data => {
+            const buttons = data.map(method => ({
+                text: method.name,
+                action: () => {
+                    selectedMethodId = method.id;
+                    displayMessage(method.name, "user");
+                    fetchRecipes(); // Fetch recipes after selecting the method
+                }
+            }));
+            displayMessage("What cooking equipment would you like to use?", "bot", buttons);
+        })
+        .catch(error => {
+            console.error("Error fetching equipment:", error);
+            displayMessage("An error occurred while fetching equipment. Please try again.", "bot");
+        });
+}
+
+// Fetch and display recipes based on selections
+function fetchRecipes() {
+    const haveIngredientIds = userIngredients.map(ingredient => ingredient.id).join(',');
+    const excludeIngredientIds = rejectedIngredients.length > 0 ? rejectedIngredients.join(',') : 'none'; // Handle empty case
+
+    if (!haveIngredientIds) {
+        displayMessage("No valid ingredients found. Please try again.", "bot");
+        return;
+    }
+
+    const fetchUrl = `/get_recipes/${selectedFoodTypeId}/${haveIngredientIds}/${selectedMethodId}`;
+    console.log("Fetching recipes from:", fetchUrl); // Debugging line
+
+    fetch(fetchUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error("Error fetching recipes:", data.error);
+                displayMessage("An error occurred while fetching recipes. Please try again.", "bot");
+                return;
+            }
+
+            if (data.recipes && data.recipes.length > 0) {
+                displayMessage("Here are some recipes you can make based on your ingredients:", "bot");
+                data.recipes.forEach(recipe => {
+                    displayMessage(recipe.name, "bot", [
+                        {
+                            text: "View Recipe",
+                            action: () => redirectToRecipe(recipe.id)
+                        }
+                    ]);
+                });
+            } else {
+                displayMessage("Sorry, we couldn't find any recipes with your selected ingredients.", "bot");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching recipes:", error);
+            displayMessage("An error occurred while fetching recipes. Please try again.", "bot");
+        });
+}
+
+function redirectToRecipe(recipeId) {
+    const recipeUrl = `/recipes/${recipeId}/`; 
+    window.location.href = recipeUrl;
+}
+
+
+// Start conversation
+askFoodType();
+
+
+        
+    </script>
+    
+</body>
+</html>

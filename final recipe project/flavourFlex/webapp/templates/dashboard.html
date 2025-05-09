@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Exo', sans-serif;
+        background-color: #183132; 
+        overflow: hidden;
+        overflow-y: auto;
+    }
+
+    .context {
+        width: 100%;
+        position: absolute;
+        top: 10vh;
+    }
+
+    .context h1 {
+        text-align: center;
+        color: #fff;
+        font-size: 50px;
+    }
+
+    .area {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1; /* Keep the animated background behind everything */
+    }
+
+    .circles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .circles li {
+        position: absolute;
+        display: block;
+        list-style: none;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        animation: animate 25s linear infinite;
+        bottom: -150px;
+    }
+
+    .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+    .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+    .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+    .circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+    .circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+    .circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+    .circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+    .circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+    .circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+    .circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+    @keyframes animate {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+        100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+    }
+
+    /* Cards and Content */
+    .ag-format-container {
+        width: 1142px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1; /* Ensure cards appear above the background */
+    }
+
+    .ag-courses_box {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 50px 0;
+    }
+
+    .ag-courses_item {
+        flex-basis: calc(33.33333% - 30px);
+        margin: 0 15px 30px;
+        overflow: hidden;
+        border-radius: 28px;
+        position: relative;
+        z-index: 1; /* Ensure individual cards appear above the background */
+    }
+
+    .ag-courses-item_link {
+        display: block;
+        padding: 30px 20px;
+        background-color: #505050;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none;
+    }
+
+    .ag-courses-item_link:hover .ag-courses-item_bg {
+        transform: scale(10);
+    }
+
+    .ag-courses-item_title {
+        min-height: 87px;
+        margin: 0 0 25px;
+        font-weight: bold;
+        font-size: 30px;
+        color: #FFF;
+        z-index: 2;
+        position: relative;
+    }
+
+    .ag-courses-item_date-box {
+        font-size: 18px;
+        color: #FFF;
+        z-index: 2;
+        position: relative;
+    }
+
+    .ag-courses-item_date {
+        font-weight: bold;
+        color: #f7e6ca;
+        transition: color 0.5s ease;
+        font-size: larger;
+    }
+
+    .ag-courses-item_bg {
+        height: 128px;
+        width: 128px;
+        background-color: #f9b234;
+        z-index: 1;
+        position: absolute;
+        top: -75px;
+        right: -75px;
+        border-radius: 50%;
+        transition: all 0.5s ease;
+    }
+
+    .ag-courses_item:nth-child(2n) .ag-courses-item_bg { background-color: #3ecd5e; }
+    .ag-courses_item:nth-child(3n) .ag-courses-item_bg { background-color: #e46b02; }
+    .ag-courses_item:nth-child(4n) .ag-courses-item_bg { background-color: #952aff; }
+    .ag-courses_item:nth-child(5n) .ag-courses-item_bg { background-color: #cd3e94; }
+    .ag-courses_item:nth-child(6n) .ag-courses-item_bg { background-color: #4c49ea; }
+
+    @media only screen and (max-width: 979px) {
+        .ag-courses_item { flex-basis: calc(50% - 30px); }
+    }
+
+    @media only screen and (max-width: 639px) {
+        .ag-courses_item { flex-basis: 100%; }
+    }
+    .animated-btn {
+        display: inline-block;
+        position: relative;
+        padding: 12px 30px;
+        color: white;
+        background: linear-gradient(135deg, #FB8F4D, #ff5e57);
+        text-transform: uppercase;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        overflow: hidden;
+        border-radius: 8px;
+        transition: 0.5s;
+        z-index: 1;
+    }
+
+    .animated-btn:hover {
+        background: #FB8F4D;
+        color: white;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hover Animation Effect */
+    .animated-btn span {
+        position: relative;
+        z-index: 2;
+    }
+
+    .animated-btn::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+        transform: rotate(45deg);
+        transition: 0.6s;
+        opacity: 0;
+    }
+
+    .animated-btn:hover::before {
+        opacity: 1;
+        top: -25%;
+        left: -25%;
+    }
+</style>
+
+<!-- Animated Background -->
+<div class="area">
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+{% if role_request_message %}
+    <div class="alert alert-info">
+        {{ role_request_message }}
+    </div>
+{% endif %}
+{% if role_approval_message %}
+        <div class="alert alert-success">
+            {{ role_approval_message }}
+        </div>
+{% endif %}
+
+
+<!-- Dashboard Content -->
+<div class="ag-format-container">
+    <div class="ag-courses_box">
+        {% if is_admin %}
+            <div class="ag-courses_item">
+                <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <div class="ag-courses-item_title">Total Users</div>
+                    <div class="ag-courses-item_date-box">
+                        Count:
+                        <span class="ag-courses-item_date">{{ users_count }}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="ag-courses_item">
+                <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <div class="ag-courses-item_title">Total Recipes</div>
+                    <div class="ag-courses-item_date-box">
+                        Count:
+                        <span class="ag-courses-item_date">{{ recipes_count }}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="ag-courses_item">
+                <a href="#" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <div class="ag-courses-item_title">Total Authors</div>
+                    <div class="ag-courses-item_date-box">
+                        Count:
+                        <span class="ag-courses-item_date">{{ authors_count }}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="ag-courses_item">
+                <a href="{% url 'manage_roles' %}" class="ag-courses-item_link">
+                    <div class="ag-courses-item_bg"></div>
+                    <div class="ag-courses-item_title">Role Requests</div>
+                    <div class="ag-courses-item_date-box">
+                        Count:
+                        <span class="ag-courses-item_date">{{ request_count }}</span>
+                    </div>
+                </a>
+            </div>
+            <div>
+            <!-- Chart Section -->
+            <h2 style="margin-top: 20px;">Chart Statistics</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 50px; margin-right: 50px; ">
+                
+                <!-- Chart Canvas -->
+                <div style="flex: 1; background-color: #0d2e2e; padding: 10px; max-width: 500px; margin-top: 50px; ">
+                    <canvas id="dashboardChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Centered Button -->
+                <div style="flex: 0.3; display: flex; justify-content: center;">
+                    <a href="{% url 'generate_detailed_report' %}" class="animated-btn">
+                        <span>Download Detailed Report</span>
+                    </a>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-right: 50px; ">
+                
+                <!-- Chart Canvas -->
+                <div style="flex: 1; background-color: #0d2e2e; padding: 20px; max-width: 500px; margin-top: 50px; ">
+                    <label for="timeRange">Filter by:</label>
+                        <select id="timeRange">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly" selected>Monthly</option>
+                        </select>
+                        
+                        <canvas id="authorRecipeChart" width="400" height="400" style="margin-top: 10px;"></canvas>
+                </div>
+
+                <!-- Centered Button -->
+                <div style="flex: 0.3; display: flex; justify-content: center;">
+                    <a href="{% url 'generate_author_report' %}" class="animated-btn">
+                        <span>Download Detailed Report</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% elif is_author %}
+        <h2 style="margin-bottom: 30px;">Author Dashboard</h2>
+        <img src="\static\assets\c.gif" style="width: 50%; height: 20%; margin-left: 30%; margin-bottom: 50px;">
+        <div class="ag-courses_item">
+            <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+                <div class="ag-courses-item_title">Total Recipes</div>
+                <div class="ag-courses-item_date-box">
+                    Count:
+                    <span class="ag-courses-item_date">{{ recipes_count }}</span>
+                </div>
+            </a>
+        </div>
+        
+        {% else %}
+        <div class="ag-courses_item">
+            <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+                <div class="ag-courses-item_title">Total Recipes</div>
+                <div class="ag-courses-item_date-box">
+                    Count:
+                    <span class="ag-courses-item_date">{{ recipes_count }}</span>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const userCount = '{{ use_count }}';
+    const authorCount = '{{ authors_count }}';
+
+    // Bar chart rendering using Chart.js
+    const ctx = document.getElementById('dashboardChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Users', 'Authors'],
+            datasets: [{
+                label: 'Registration Statics',
+                data: [userCount, authorCount],
+                backgroundColor: ['#FF5733', '#33FF57'],  // Custom colors for bars
+                borderColor: ['#C70039', '#28A745'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white' // White color for the legend text
+                    }
+                },
+                tooltip: {
+                    bodyColor: 'white',
+                    titleColor: 'white',
+                    backgroundColor: '#333'
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white' // White x-axis labels
+                    },
+                    grid: {
+                        color: '#555' // Optional: Change grid line colors
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        color: 'white' // White y-axis labels
+                    },
+                    grid: {
+                        color: '#555'
+                    }
+                }
+            }
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+    const ctxPie = document.getElementById("authorRecipeChart").getContext("2d");
+
+    let pieChart = new Chart(ctxPie, {
+        type: "pie",
+        data: {
+            labels: ["Authors", "Recipes"],
+            datasets: [{
+                data: [0, 0], // Initial empty data
+                backgroundColor: ["#FFD700", "#FF69B4"], // Green for Authors, Orange for Recipes
+                borderColor: ["#388E3C", "#C70039"],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { labels: { color: "white" } },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            let value = tooltipItem.raw;
+                            let total = pieChart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            let percentage = ((value / total) * 100).toFixed(1);
+                            return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    function updatePieChart(range) {
+        fetch(`/get-chart-data/?range=${range}`)
+            .then(response => response.json())
+            .then(data => {
+                let total = data.authors_count + data.recipes_count;
+                let authorPercentage = ((data.authors_count / total) * 100).toFixed(1);
+                let recipePercentage = ((data.recipes_count / total) * 100).toFixed(1);
+
+                pieChart.data.labels = [
+                    `Authors (${authorPercentage}%)`, 
+                    `Recipes (${recipePercentage}%)`
+                ];
+                pieChart.data.datasets[0].data = [data.authors_count, data.recipes_count];
+
+                pieChart.update();
+            })
+            .catch(error => console.error("Error fetching chart data:", error));
+    }
+
+    // Fetch data on dropdown change
+    document.getElementById("timeRange").addEventListener("change", function () {
+        updatePieChart(this.value);
+    });
+
+    // Load initial data
+    updatePieChart("monthly");
+});
+// history.pushState(null, null, location.href);
+//     window.onpopstate = function () {
+//         history.pushState(null, null, location.href);
+// };
+window.onload = function () {
+        if (performance.navigation.type === 2) {
+            window.location.href = "{% url 'dash' %}";  // Redirect to dashboard
+        }
+    };
+</script>
+
+{% endblock %}

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlavourFlex Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <style>
+             
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #264645;
+            color: #fff;
+            overflow: hidden; /* Prevent scroll due to falling objects */
+        }
+
+        /* Falling Objects Animation */
+        .falling-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .falling-objects span {
+            position: absolute;
+            top: -5%;
+            left: calc(100% * var(--x-position));
+            font-size: var(--size);
+            color: rgba(255, 255, 255, 0.8);
+            animation: fall var(--duration) linear infinite;
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            width: 80%;
+            height: 70vh;
+            background: linear-gradient(to bottom, #223232, #264645);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 80px auto;
+        }
+
+        /* Left Section */
+        .left-section {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #233938;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FB8F4D;
+            text-shadow: 2px 2px 0 #000;
+            margin: 10px;
+        }
+
+        .logo span {
+            color: #FFD700;
+        }
+
+        .illustration {
+            margin-top: 20px;
+            max-width: 80%;
+            height: auto;
+        }
+
+        /* Right Section */
+        .right-section {
+            flex:1;
+            background: linear-gradient(to bottom right, #FB8F4D, #D8654D);
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+
+        .right-section h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #264645;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #264645;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: none;
+            background: #fbd3ca;
+            font-size: 1em;
+            color: #333;
+        }
+
+        input::placeholder {
+            color: #8a8a8a;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 40%;
+            right: 30px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #8a8a8a;
+        }
+
+        .login-button {
+            width: 50%;
+            padding: 15px;
+            background-color: #38802b;
+            color: #edf2e7;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 20px auto 0; 
+            display: block; 
+        }
+
+
+        .login-button:hover {
+            background-color: #234506;
+        }
+
+         /* Styling for messages */
+         .messages {
+            width: 100%;
+            max-width: 400px;
+            list-style-type: none;
+            border-radius: 20px;
+        }
+
+        .messages li {
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-left: 30px;
+        }
+
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .messages .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+
+        <!-- Dropdown for Language Selection -->
+        <div style="text-align: right; margin: 10px; align-items: left; display: flex; margin-left: 80%;">
+            <label for="language" style="color: #fff; font-size: 16px; display: flex; ">Choose Language:</label>
+            <select id="language-selector" onchange="changeLanguage(this.value)">
+                <option value="en" selected>English</option>
+                <option value="si">සිංහල</option>
+                <option value="ja">日本語</option>
+                <option value="ta">தமிழ்</option>
+            </select>
+        </div>
+
+   
+    
+     <!-- Falling objects container -->
+     <div class="falling-objects"></div>
+    
+     <!-- Logo -->
+     <h1 class="logo">Flavour<span>Flex</span></h1>
+     
+     <!-- Main Container -->
+     <div class="container">
+         <!-- Left Section -->
+         <div class="left-section">
+             <img src="/static/assets/recipe-illustration.png" alt="Recipe Illustration" class="illustration">
+         </div>
+ 
+         <!-- Right Section -->
+         <div class="right-section">
+             {% if messages %}
+             <div class="messages">
+                     {% for message in messages %}
+                         <span class="error" style="padding: 10px;">{{ message }}</li>
+                     {% endfor %}
+             </div>
+             {% endif %}
+             
+             <h1 data-translate-key="login">Log In</h1>
+             <form method="POST" action="{% url 'login' %}">
+                 {% csrf_token %}
+                 <label for="name" data-translate-key="username">Username</label>
+                 <input type="text" id="name" name="name" data-translate-key="uname" placeholder="Enter your name">
+                 <br><br>
+                 <label for="password" data-translate-key="password">Password</label>
+                 <div class="password-container">
+                     <input type="password" id="password" name="password" data-translate-key="password" placeholder="Enter your password">
+                     <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
+                 </div>
+                 <div style="display: flex;">
+                 <p style="font-style: italic; color: #434141;" data-translate-key="notRegistered">Are you not registered?</p>
+                 <a href="{% url 'register' %}" data-translate-key="signup" style="color: #4b3607; text-decoration: none;">Sign Up</a>
+                 </div><br>
+                 <button type="submit" class="login-button" data-translate-key="login">LOG IN</button>
+             </form>
+         </div>
+     </div>
+    
+    <!-- JavaScript -->
+    <script>
+        const translations = {
+            en: {
+                login: "Log In",
+                username: "Username",
+                password: "Password",
+                notRegistered: "Are you not registered?",
+                signup: "Sign Up",
+                uname: "Enter your name",
+                pasword: "Enter password",
+            },
+            si: {
+                login: "ඇතුල් වන්න",
+                username: "පරිශීලක නාමය",
+                password: "මුරපදය",
+                notRegistered: "ඔබ ලියාපදිංචි වී නොමැතිද?",
+                signup: "ලියාපදිංචි වන්න",
+                uname: "ඔබේ නම ඇතුළත් කරන්න",
+                pasword: "මුරපදය ඇතුළත් කරන්න",
+            },
+            ta: {
+                login: "உள்நுழையவும்",
+                username: "பயனர்பெயர்",
+                password: "கடவுச்சொல்",
+                notRegistered: "நீங்கள் பதிவுசெய்யப்படவில்லையா?",
+                signup: "பதிவு செய்க",
+                uname: "உங்கள் பெயரை உள்ளிடவும்",
+                pasword: "கடவுச்சொல்லை உள்ளிடவும்",
+            },
+            ja: {
+                login: "ログイン",
+                username: "ユーザー名",
+                password: "パスワード",
+                notRegistered: "登録していませんか？",
+                signup: "サインアップ",
+                uname: "名前を入力してください",
+                pasword: "パスワードを入力してください",
+            },
+        };
+
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById("language").value;
+
+            document.querySelectorAll("[data-translate-key]").forEach(el => {
+                const key = el.getAttribute("data-translate-key");
+
+                if (languageData[selectedLanguage][key]) {
+                    if (el.tagName === "INPUT") {
+                        el.setAttribute("placeholder", languageData[selectedLanguage][key]); // For input placeholders
+                    
+                    }else {
+                        el.textContent = languageData[selectedLanguage][key]; // For text content
+                    }
+                }
+            });
+        }
+
+        // Default to English
+        changeLanguage("en");
+
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+
+            // Toggle eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Generate falling objects dynamically
+        const fallingContainer = document.querySelector('.falling-objects');
+        const symbols = ['✽', '❉', '★', '✦', '❋'];
+
+        for (let i = 0; i < 50; i++) {
+            const span = document.createElement('span');
+            const size = Math.random() * 20 + 10 + 'px';
+            const xPosition = Math.random();
+            const duration = Math.random() * 10 + 5 + 's';
+
+            span.style.setProperty('--size', size);
+            span.style.setProperty('--x-position', xPosition);
+            span.style.setProperty('--duration', duration);
+            span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+            fallingContainer.appendChild(span);
+        }
+
+        // Check for stored language
+        const savedLanguage = localStorage.getItem("language") || "en";
+        changeLanguage(savedLanguage);
+        document.getElementById("language-selector").value = savedLanguage;
+
+        // Save the selected language
+        document.getElementById("language-selector").addEventListener("change", (e) => {
+            localStorage.setItem("language", e.target.value);
+        });
+
+    </script>
+</body>
+</html>

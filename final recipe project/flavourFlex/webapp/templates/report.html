@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Report{% endblock %}
+
+{% block content %}
+<style>
+    .container-r{
+        max-width: 500px;
+        margin-top: 50px;
+        background: rgb(11, 81, 81);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        color: rgb(246, 238, 238);
+        margin: 30px;
+    }
+    .title {
+        color: #FB8F4D;
+        text-align: center;
+        font-weight: bold;
+    }
+    .btn-animated {
+        background: linear-gradient(45deg, #FB8F4D, #FFD700);
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        color: rgb(30, 22, 22);
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
+        display: block;
+        width: 100%;
+        text-transform: uppercase;
+    }
+    .btn-animated:hover {
+        transform: scale(1.05);
+        background: linear-gradient(45deg, #FFD700, #FB8F4D);
+    }
+    .animated-btn {
+        background-color: #FB8F4D;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+        color: brown;
+        font-weight: 800;
+    }
+    .animated-btn:hover {
+        background-color: #FFD700;
+        transform: scale(1.05);
+    }
+    /* Add specific styles for charts */
+    .chart-container {
+        max-width: 600px;
+        margin: 30px auto;
+    }
+    canvas {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+<body>
+    <h1>REPORT</h1>
+    <div style="display: flex; margin: 30px;">
+    <div class="container-r">
+        <h2 class="title">Generate Equipment Report</h2><br>
+        <form id="equipmentReportForm" method="POST" action="{% url 'generate_pdf' %}">
+            {% csrf_token %}
+            <label for="method" class="form-label">Select Cooking Method:</label>
+            <select name="method" id="method" class="form-control">
+                {% for method in methods %}
+                <option value="{{ method.id }}">{{ method.name }}</option>
+                {% endfor %}
+            </select>
+            <!-- Pie chart for Equipment -->
+            <div class="chart-container">
+                <canvas id="equipmentChart"></canvas>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-animated mt-3">Generate Report</button>
+        </form>
+    </div>
+
+    <div class="container-r" style="margin-left: 20%; ">
+        <h2 class="title">Generate Recipe Report</h2><br>
+        <form id="ingredientReportForm" method="POST" action="{% url 'generate_ingre' %}">
+            {% csrf_token %}
+            <label for="recipe_name">Enter Recipe Name:</label>
+            <input type="text" name="recipe_name" id="recipe_name" class="form-control" required>
+            <br>
+            <!-- Bar chart for Ingredients -->
+            <div class="chart-container">
+                <canvas id="ingredientChart"></canvas>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 animated-btn">Generate Report</button>
+        </form>        
+    </div>
+    </div>
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Parse data from Django
+    const equipmentData = JSON.parse(document.getElementById('equipment-data').textContent);
+    const equipmentLabels = JSON.parse(document.getElementById('equipment-labels').textContent);
+    const ingredientData = JSON.parse(document.getElementById('ingredient-data').textContent);
+    const ingredientLabels = JSON.parse(document.getElementById('ingredient-labels').textContent);
+
+    console.log('Equipment Data:', equipmentData);
+    console.log('Equipment Labels:', equipmentLabels);
+    console.log('Ingredient Data:', ingredientData);
+    console.log('Ingredient Labels:', ingredientLabels);
+
+    // Equipment Pie Chart
+    const equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
+    const equipmentChart = new Chart(equipmentCtx, {
+        type: 'pie',
+        data: {
+            labels: equipmentLabels,
+            datasets: [{
+                label: 'Equipment Usage',
+                data: equipmentData,
+                backgroundColor: ['#FB8F4D', '#FFD700', '#00FF00', '#00BFFF', '#8A2BE2'],
+                borderColor: ['#FFF', '#FFF', '#FFF', '#FFF', '#FFF'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' recipes';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Ingredient Bar Chart
+    const ingredientCtx = document.getElementById('ingredientChart').getContext('2d');
+    const ingredientChart = new Chart(ingredientCtx, {
+        type: 'bar',
+        data: {
+            labels: ingredientLabels,
+            datasets: [{
+                label: 'Ingredient Count',
+                data: ingredientData,
+                backgroundColor: '#FB8F4D',
+                borderColor: '#FFD700',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' ingredients';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Event listener for the "method" dropdown (update the equipment chart)
+    document.getElementById('method').addEventListener('change', function() {
+        const selectedMethodId = this.value;
+
+        // Fetch new data from the server
+        fetch(`/get-equipment-data/?method_id=${selectedMethodId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the chart with new data
+                equipmentChart.data.labels = data.labels;
+                equipmentChart.data.datasets[0].data = data.values;
+                equipmentChart.update();
+            })
+            .catch(error => console.error('Error fetching equipment data:', error));
+    });
+
+    // Event listener for the "recipe_name" input (update the ingredient chart)
+    document.getElementById('recipe_name').addEventListener('input', function() {
+        const recipeName = this.value;
+
+        // Fetch new data from the server
+        fetch(`/get-ingredient-data/?recipe_name=${recipeName}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the chart with new data
+                ingredientChart.data.labels = data.labels;
+                ingredientChart.data.datasets[0].data = data.values;
+                ingredientChart.update();
+            })
+            .catch(error => console.error('Error fetching ingredient data:', error));
+    });
+});
+    </script>
+</body>
+{% endblock %}

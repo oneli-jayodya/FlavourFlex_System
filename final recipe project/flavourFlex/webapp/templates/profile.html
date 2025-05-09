@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        color: #0e3224; 
+        font-weight: 900;
+        text-shadow: 2px 2px 4px aliceblue, -1px -1px 4px aliceblue, 1px -1px 4px aliceblue, -1px 1px 4px aliceblue;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    li {
+        display: inline;
+    }
+
+    .change a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #ce9c08;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        display: inline-block;
+    }
+
+    .change a:hover {
+        background-color: #f97c33;
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .change a:active {
+        transform: scale(0.95);
+        background-color: #d76b2c;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<h2>Welcome to your profile, {{ user.username }}</h2>
+
+<img style="height: 400px; margin-left: 35%;" src="\static\assets\output-onlinegiftools (1).gif">
+<div class="container">
+    <!-- Display success or error messages -->
+    {% if messages %}
+        <div class="alert alert-info" role="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+<ul>
+    <li class="change"><a href="{% url 'change_password' %}">Change Password</a></li>
+    <li class="change"><a href="{% url 'delete_account' %}">Delete Account</a></li>
+</ul>
+{% endblock %}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlavourFlex Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #264645;
+            color: #fff;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        h1{
+            text-align: right;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            height: 80vh;
+            background: linear-gradient(to bottom, #223232, #264645);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 80px auto;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .left-section {
+            flex:1;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: #233938;
+        }
+
+        .left-section h2 {
+            font-size: 1.8em;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #efb144;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: #ebece3;
+            margin-left: 40px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 80%; /* Increased width */
+            padding: 12px; /* Adjusted padding */
+            margin-bottom: 15px;
+            border-radius: 15px;
+            margin-left: 40px;
+            border: none;
+            background: #fbd3ca;
+            font-size: 1em;
+            color: #333;
+        }
+
+        input::placeholder {
+            color: #8a8a8a;
+            font-size: 13px;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 40%;
+            right: 15%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #8a8a8a;
+        }
+
+        .registration-button {
+        width: 40%; /* Adjust the width as needed */
+        padding: 12px;
+        background-color: #38802b;
+        color: #edf2e7;
+        font-size: 1.1em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: block; /* Makes the button a block-level element */
+        margin: 0 auto; /* Centers it horizontally */
+        }
+
+        .registration-button:hover {
+            background-color: #234506;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #38802b;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: #e63946;
+            font-size: 0.9em;
+            display: none;
+            margin-bottom: 10px;
+            margin-left: 40px;
+        }
+
+        .right-section {
+            flex: 1;
+            background: linear-gradient(to bottom right, #FB8F4D, #D8654D);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FB8F4D;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .logo span {
+            color: #FFD700;
+        }
+
+        .illustration {
+            margin-top: 20px;
+            max-width: 80%;
+            height: auto;
+            margin-left: 40px;
+        }
+        svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .links {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-family: sans-serif;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+            margin-left: 1em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a img.icon {
+            display: inline-block;
+            height: 1em;
+            margin: 0 0 -0.1em 0.3em;
+        }
+        .messages {
+            width: 100%;
+            max-width: 400px;
+            list-style-type: none;
+            border-radius: 20px;
+        }
+
+        .messages li {
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-left: 30px;
+        }
+
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .messages .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <svg preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80">
+        <defs>
+            <style>
+                @keyframes rotate {
+                         0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+                .out-top {
+                    animation: rotate 20s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .in-top {
+                    animation: rotate 10s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .out-bottom {
+                    animation: rotate 25s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+                .in-bottom {
+                    animation: rotate 15s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+            </style>
+        </defs>
+        <path fill="#ff9900" class="out-top" d="M37-5C25.1-14.7,5.7-19.1-9.2-10-28.5,1.8-32.7,31.1-19.8,49c15.5,21.5,52.6,22,67.2,2.3C59.4,35,53.7,8.5,37-5Z"/>
+        <path fill="#ff6600" class="in-top" d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z"/>
+        <path fill="#006600" class="out-bottom" d="M105.9,48.6c-12.4-8.2-29.3-4.8-39.4.8-23.4,12.8-37.7,51.9-19.1,74.1s63.9,15.3,76-5.6c7.6-13.3,1.8-31.1-2.3-43.8C117.6,63.3,114.7,54.3,105.9,48.6Z"/>
+        <path fill="#003300" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
+    </svg>
+    
+        <h1 class="logo">Flavour<span>Flex</span></h1>
+        <!-- Language Selector -->
+            <div style="text-align: right; margin: 10px; align-items: left; display: flex;">
+                <label for="language" style="color: #fff; font-size: 16px; display: flex; ">Choose Language:</label>
+                <select id="language" name="language">
+                    <option value="en" selected>English</option>
+                    <option value="si">සිංහල</option>
+                    <option value="ja">日本語</option>
+                    <option value="ta">தமிழ்</option>
+                </select>
+            </div>
+            {% if messages %}
+                <div class="messages">
+                        {% for message in messages %}
+                            <span class="error" style="padding: 10px;">{{ message }}</li>
+                        {% endfor %}
+                </div>
+                {% endif %}
+        <div class="container">
+                
+    
+            <div class="left-section">
+                <h2 id="signup-title" data-translate-key="signupTitle">Sign Up</h2>
+                <form method="POST" id="registrationForm">
+                    {% csrf_token %}
+                    <label for="username" id="label-username" data-translate-key="labelUsername">Username</label>
+                    <input type="text" id="username" name="username"  data-translate-key="uname" placeholder="Enter your name" required>
+    
+                    <label for="email" id="label-email"  data-translate-key="labelEmail">Email</label>
+                    <input type="email" id="email" name="email" data-translate-key="mail" placeholder="Enter your email" required>
+    
+    
+                    <label for="password" id="label-password"  data-translate-key="labelPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" data-translate-key="pasword" placeholder="Enter your password" required>
+                        <i class="fa-solid fa-eye-slash toggle-password"></i>
+                    </div>
+    
+                    <label for="confirmPassword" id="label-confirm-password" data-translate-key="labelConfirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" name="confirm_password" data-translate-key="cpw" placeholder="Re-enter your password" required>
+                        <i class="fa-solid fa-eye-slash toggle-password"></i>
+                    </div>
+                    <div style="display: flex;">
+                    <p style="margin-left: 40px; font-style: italic; color: #8a8a8a;" data-translate-key="Registered">
+                        Already registered?</p>
+                        <a href="{% url 'login' %}" data-translate-key="log" style="color: #93e584; text-decoration: none; font-weight: 700;" >Login</a>
+                    </div>
+                    <br>
+                    <button type="submit" class="registration-button" data-translate-key="signupTitle" >Register</button>
+                </form>
+            </div>
+            <div class="right-section">
+                <img src="/static/assets/cook-animation.gif" alt="Recipe Illustration" class="illustration">
+            </div>
+        </div>
+    
+        <script>
+            // Language data
+            const languageData = {
+                en: {
+                    signupTitle: "Register",
+                    labelUsername: "Username",
+                    labelEmail: "Email",
+                    labelPassword: "Password",
+                    labelConfirmPassword: "Confirm Password",
+                    Registered: "Already registered?",
+                    log: "LogIn",
+                    uname: "Enter your name",
+                    mail: "Enter your email",
+                    pasword: "Enter password",
+                    cpw: "Re-enter password",
+                },
+                si: {
+                    signupTitle: "ලියාපදිංචි වන්න",
+                    labelUsername: "පරිශීලක නාමය",
+                    labelEmail: "ඊමේල්",
+                    labelPassword: "මුරපදය",
+                    labelConfirmPassword: "මුරපදය තහවුරු කරන්න",
+                    Registered: "දැනටමත් ලියාපදිංචි වී ඇතිද?",
+                    log: "ඇතුළුවන්න",
+                    uname: "ඔබේ නම ඇතුළත් කරන්න",
+                    mail: "ඔබේ ඊමේල් ලිපිනය ඇතුළත් කරන්න",
+                    pasword: "මුරපදය ඇතුළත් කරන්න",
+                    cpw: "මුරපදය නැවත ඇතුළත් කරන්න"
+                },
+                ja: {
+                    signupTitle: "サインアップ",
+                    labelUsername: "ユーザー名",
+                    labelEmail: "メール",
+                    labelPassword: "パスワード",
+                    labelConfirmPassword: "パスワードを確認する",
+                    Registered: "すでに登録していますか？",
+                    log: "ログイン",
+                    uname: "名前を入力してください",
+                    mail: "メールアドレスを入力してください",
+                    pasword: "パスワードを入力してください",
+                    cpw: "もう一度パスワードを入力してください",
+                },
+                ta: {
+                    signupTitle: "பதிவு செய்யவும்",
+                    labelUsername: "பயனர் பெயர்",
+                    labelEmail: "மின்னஞ்சல்",
+                    labelPassword: "கடவுச்சொல்",
+                    labelConfirmPassword: "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+                    Registered: "ஏற்கனவே பதிவு செய்தீர்களா?",
+                    log: "உள்நுழைய",
+                    uname: "உங்கள் பெயரை உள்ளிடவும்",
+                    mail: "உங்கள் மின்னஞ்சலை உள்ளிடவும்",
+                    pasword: "கடவுச்சொல்லை உள்ளிடவும்",
+                    cpw: "கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
+                },
+            };
+    
+        // changeLanguage function
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById("language").value;
+
+            document.querySelectorAll("[data-translate-key]").forEach(el => {
+                const key = el.getAttribute("data-translate-key");
+
+                if (languageData[selectedLanguage][key]) {
+                    if (el.tagName === "INPUT") {
+                        el.setAttribute("placeholder", languageData[selectedLanguage][key]); // For input placeholders
+                    
+                    }else {
+                        el.textContent = languageData[selectedLanguage][key]; // For text content
+                    }
+                }
+            });
+        }
+
+        // Event Listener for Language Selector
+        document.getElementById("language").addEventListener("change", changeLanguage);
+
+
+        // toggle password functionality
+        document.querySelectorAll(".toggle-password").forEach((icon) => {
+            icon.addEventListener('click', () => {
+                const input = icon.previousElementSibling;
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                icon.classList.toggle('fa-eye-slash', !isPassword);
+                icon.classList.toggle('fa-eye', isPassword);
+            });
+        });
+
+    </script>
+</body>
+</html>
